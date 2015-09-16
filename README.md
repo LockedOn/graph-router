@@ -77,9 +77,9 @@ Just as a keyword receives one argument when being used as a function to access 
 
 ;; This will produce an identical graph to the above example.
 (def graph {(with :Root generate-data) [(with :Hello get-hello) :World]})
-```
+``` 
 
-### Putting it all together
+### Putting It All Together
 
 `dispatch` processes a query in relation to a graph. Fortunately the query looks very similar to a graph.
 
@@ -97,7 +97,6 @@ Just as a keyword receives one argument when being used as a function to access 
 (def query '{:Root [:Hi :Hello]})
 
 (dispatch graph query) ;; => {:Root {:Hi "Hello World!", :Hello nil}}
-
 ```
 
 There is quite a bit going on in the previous example. 
@@ -107,6 +106,91 @@ which in turn uses `generate-data` being passed in as `e`.
 
 `query` is a quoted form, defining the shape of the data required.
 `query` is requesting `:Hi` and `:Hello` from `:Root`. Given only `:Hi` is exposed from `:Root`, the result of `:Hello` is `nil`.
+
+
+### Passing Arguments 
+
+Arguments can be passed to keywords, anywhere keywords are in the query.
+
+```clojure
+(defn generate-data 
+    [_] 
+    {:Hello "Hello" :World "World"})
+
+(defn speak
+    [e greeting]
+    (str greeting " " (:World e) "!"))
+
+(def graph {(with :Root generate-data) [(with :Say speak)]})
+
+(def query '{:Root [(:Say "Hi")]})
+
+(dispatch graph query) ;; => {:Root {:Say "Hi World!"}}
+```
+
+In `query` we are passing "Hi" to the function that is aliased for `:Say`.
+
+There is no hard limit to the number of arguments that can be passed.
+
+### Collections
+
+Collections are handled transparently, the graph description and query stay the same, the only thing that changes is the data and result.
+
+```clojure
+(defn generate-data 
+    [_] 
+    [{:Hello "Hello" :World "World"}])
+
+(def graph {(with :Root generate-data) [:Hello :World]})
+
+(def query '{:Root [:Hello]})
+
+(dispatch graph query) ;; => {:Root [{:Hello "Hello"}]}
+```
+
+### Nested Data
+
+Graph-router borrows the concept of nesting queries to access nested data.
+
+```clojure
+(defn generate-data
+    [_]
+    {:One {:Two "Deep" :Three "3"}})
+
+(def graph {(with :Root generate-data) [{:One [:Two]}]})
+
+(def query '{:Root [{:One [:Two]}]})
+
+(dispatch graph query) ;; => {:Root {:One {:Two "Deep"}}}
+```
+
+In both `graph` and `query` all the same rules are applied to define the nested graph description and query.
+
+### Multiple Roots
+
+The graph description can have multiple roots, however the query can only access one at a time.
+
+```clojure
+(defn generate-data 
+    [_] 
+    {:Hello "Hello" :World "World"})
+
+(defn second-root 
+    [_] 
+    {:Hi "Hi" :Moon "Moon"})
+
+(def graph {(with :Root generate-data) [:Hello :World]
+            (with :Root2 second-root) [:Hi :Moon]})
+
+(def query '{:Root2 [:Hi :Moon]})
+
+(dispatch graph query) ;; => {:Root2 {:Hi "Hi", :Moon "Moon"}}
+```
+
+### Recursive Data Structures
+
+### Weaving Sub Graphs
+
 
 
 ## License
