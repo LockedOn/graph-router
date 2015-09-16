@@ -233,7 +233,7 @@ Notice how `a` and `b` reference each other.
 
 ### Weaving Functions
 
-`with` has two jobs; Aliasing functions as described earlier and attaching functions that the result of the function can be weaved through.
+`with` has two jobs; aliasing functions as described earlier and attaching functions that the result of the function can be weaved through.
 
 ```clojure
 (defn generate-data 
