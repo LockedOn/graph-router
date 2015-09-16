@@ -233,7 +233,31 @@ Notice how `a` and `b` reference each other.
 
 ### Weaving Functions
 
+`with` has two jobs; Aliasing functions as described earlier and attaching functions that the result of the function can be weaved through.
 
+```clojure
+(defn generate-data 
+    [_] 
+    [{:Hello "Hello" :World "World"} {:Hello "Hi" :World "Moon"}])
+
+(def graph {(with :Root generate-data {'take take}) [:Hello :World]})
+
+(def query '{(->> :Root (take 1)) [:Hello]})
+
+(dispatch graph query) ;; => {:Root [{:Hello "Hello"}]}
+```
+
+`with` accepts an additional argument of a hash map with the key being a symbol and the value being the function. In the above example we are declaring the symbol `'take` to use the clojure.core function `take`.
+
+Graph-router borrows the syntax from the Clojure thead last macro `->>`. The weave function has no limit to the number of functions to weave the result through. Each function can take additional arguments as in the example above where `take` is being given the additional argument `1`. 
+
+__NOTE:__ The result is always passed as the last argument to the weave functions.
+
+## TODO
+
+* Add thread first weave.
+* Statically analyze the query in relation to the graph to validate that the query is a strict subset of graph.
+* Statically analyze the arity of all functions to ensure the correct number of arguments are being passed before the query is processed.
 
 ## License
 
