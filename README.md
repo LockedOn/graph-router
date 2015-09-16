@@ -30,6 +30,9 @@ Requiring graph-router.core provides you with two functions `dispatch` and `with
 	(:require [graph-router.core :refer :all]))
 ```
 
+__NOTE:__
+All future examples assume both `dispatch` and `with` are imported.
+
 ### Composing Graph Descriptions
 
 Graphs descriptions are data structures defining the shape of data in Clojure hash maps available for querying.
