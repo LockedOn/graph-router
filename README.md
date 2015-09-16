@@ -193,14 +193,14 @@ The graph description can have multiple roots, however the query can only access
 
 ### Recursive Graph Descriptions
 
-Graph-router with recursive data structures to define graph descriptions.
+Graph-router uses Clojure references to build recusive graph descriptions.
 
 ```clojure
 (defn generate-data
     [_]
     {:left {:right {:value "Hello"}} :right {:value 2}})
 
-(def b-tree [{:left b-tree} {:right b-tree} :value])
+(def b-tree [{:left #'b-tree} {:right #'b-tree} :value])
 
 (def graph {(with :Root generate-data) b-tree})
 
@@ -209,7 +209,7 @@ Graph-router with recursive data structures to define graph descriptions.
 (dispatch graph query) ;; => {:Root {:left {:right {:value "Hello"}}}}
 ```
 
-Graph-router can also follow unbound references to do mutual recusion.
+This also allows you to do mutual recursion.
 
 ```clojure
 (defn generate-data
