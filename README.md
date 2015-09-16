@@ -172,7 +172,7 @@ In both `graph` and `query` all the same rules are applied to define the nested 
 
 ### Multiple Roots
 
-The graph description can have multiple roots, however the query can only access one at a time.
+The graph description can have multiple roots, however the query can only access one.
 
 ```clojure
 (defn generate-data 
@@ -192,6 +192,44 @@ The graph description can have multiple roots, however the query can only access
 ```
 
 ### Recursive Graph Descriptions
+
+Graph-router with recursive data structures to define graph descriptions.
+
+```clojure
+(defn generate-data
+    [_]
+    {:left {:right {:value "Hello"}} :right {:value 2}})
+
+(def b-tree [{:left b-tree} {:right b-tree} :value])
+
+(def graph {(with :Root generate-data) b-tree})
+
+(def query '{:Root [{:left [{:right [:value]}]}]})
+
+(dispatch graph query) ;; => {:Root {:left {:right {:value "Hello"}}}}
+```
+
+Graph-router can also follow unbound references to do mutual recusion.
+
+```clojure
+(defn generate-data
+    [_]
+    {:A {:B {:A {:value "Hello Word!"}}}})
+
+(declare b)
+
+(def a [{:A #'b} :value])
+
+(def b [{:B a} :value])
+
+(def graph {(with :Root generate-data) a})
+
+(def query '{:Root [{:A [{:B [{:A [:value]}]}]}]})
+
+(dispatch graph query) ;; => {:Root {:A {:B {:A {:value "Hello Word!"}}}}}
+```
+
+__NOTE:__ How `a` and `b` reference each other.
 
 ### Weaving Functions
 
