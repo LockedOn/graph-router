@@ -12,7 +12,9 @@
 		k
 		[Weave k f]))
 
-(defn with 
+(defn with
+	"Alias a keyword with another function and or register weave functions.
+	See https://github.com/LockedOn/graph-router for more information."
 	([k x]
 		(if (map? x)
 			(with k nil x)

@@ -126,6 +126,8 @@
 		{attrib-key (step (get-context graph attrib-key) query entity)}))
 
 (defn dispatch 
+	"Process a graph description with a query.
+	See https://github.com/LockedOn/graph-router for more information."
 	[graph query & [entity]]
 	(step (gr/parse graph gr/context-list-schema)
 		  (qu/parse query qu/context-schema)
