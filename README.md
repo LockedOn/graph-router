@@ -189,7 +189,7 @@ The graph description can have multiple roots, however the query can only access
 
 ### Recursive Graph Descriptions
 
-### Weaving Sub Graphs
+### Weaving Functions
 
 
 
