@@ -187,7 +187,7 @@ The graph description can have multiple roots, however the query can only access
 (dispatch graph query) ;; => {:Root2 {:Hi "Hi", :Moon "Moon"}}
 ```
 
-### Recursive Data Structures
+### Recursive Graph Descriptions
 
 ### Weaving Sub Graphs
 
