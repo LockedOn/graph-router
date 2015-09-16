@@ -229,7 +229,7 @@ This also allows you to do mutual recursion.
 (dispatch graph query) ;; => {:Root {:A {:B {:A {:value "Hello Word!"}}}}}
 ```
 
-__NOTE:__ How `a` and `b` reference each other.
+Notice how `a` and `b` reference each other.
 
 ### Weaving Functions
 
