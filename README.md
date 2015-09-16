@@ -10,6 +10,7 @@ Graph-router leverages the fact that Clojure keywords are also functions for
 accessing data in Clojure hash maps. This means that Graph-router will work with 
 any data type that allows keywords to access values, this include Datomic entities. 
 
+[![Build Status](https://travis-ci.org/LockedOn/graph-router.svg?branch=master)](https://travis-ci.org/LockedOn/graph-router)
 
 ## Installation
 
