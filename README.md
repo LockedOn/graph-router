@@ -46,7 +46,7 @@ Graphs descriptions are data structures defining the shape of data in Clojure ha
 
 In the example above two bindings are defined:
 
-`data` is a Clojure Hash map.
+`data` is a Clojure data structure accessable via Clojure keywords.
 
 `data-keys` is a description of how to consume the values in `data`.
 
@@ -65,6 +65,8 @@ Graph-router requires at the top level a hash-map of data generators.
 ```
 
 In the above example the keyword `:Root` is declared as an alias for `generate-data` that returns the data.
+
+`generate-data` is called once per dispatch. This is very useful as `generate-data` could be used to return data from an external source like a SQL database, datomic, a third party REST API or any other data source you like.
 
 __NOTE:__
 When using `with` to swap what function is used to access data, the function used must receive at least one argument. 
