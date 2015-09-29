@@ -3,7 +3,7 @@
   :url "http://github.com/LockedOn/graph-router"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/clojure "1.7.0"]
-    			 [prismatic/schema "0.4.4"]]
-  :deploy-repositories [["releases" :clojars]]
-  :main graph-router.core)
+  :dependencies [[prismatic/schema "0.4.4"]]
+  :profiles {:dev {:dependencies [[org.clojure/clojure "1.7.0"]]
+				   :main graph-router.core}}
+  :deploy-repositories [["releases" :clojars]])
