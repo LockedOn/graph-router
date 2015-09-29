@@ -25,6 +25,23 @@
 		(or (symbol? symbol-fn) 
 		  	(if list-fn (list 'defn (symbol (str (java.util.UUID/randomUUID))) (rest f))))))
 
+(defn- arg-length 
+	"Takes a vecor of args and returns minimum required arity."
+	[args]
+	(let [amp-index (first (keep-indexed #(if (= %2 '&) %1) args))
+		  args' (if amp-index 
+		  			(subvec args 0 amp-index)
+		  			args)]
+		  [(if amp-index >= =) (count args')]))
+
+(defn- correct-args 
+	"Check if arglists is the correct arity."
+	[arglists arity]
+	(->> arglists
+		(map arg-length)
+		(reduce (fn [ok [pred len]]
+					(or ok (pred arity len))) false)))
+
 (defmacro with
 	"Alias a keyword with another function and or register weave functions.
 	See https://github.com/LockedOn/graph-router for more information."
