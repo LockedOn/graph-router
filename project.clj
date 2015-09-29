@@ -5,5 +5,6 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[prismatic/schema "0.4.4"]]
   :profiles {:dev {:dependencies [[org.clojure/clojure "1.7.0"]]
+  				   :plugins [[com.jakemccrary/lein-test-refresh "0.10.0"]]
 				   :main graph-router.core}}
   :deploy-repositories [["releases" :clojars]])
