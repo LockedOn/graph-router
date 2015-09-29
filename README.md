@@ -2,7 +2,7 @@
 
 # ![graph-router](https://github.com/lockedon/graph-router/blob/master/graph-router-logo.png)
 
-A Clojure library for composing and querying graphs!
+A Clojure library for declarative data fetching in derived graphs!
 
 Graph-router *aims* to provide [GraphQL](https://github.com/facebook/graphql) like query power with the elegance of 
 the [Datomic Pull API](http://docs.datomic.com/pull.html) whilst sitting on top 

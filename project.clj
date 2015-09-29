@@ -1,5 +1,5 @@
 (defproject lockedon/graph-router "0.1.6"
-  :description "A Clojure library for composing and quering graphs!"
+  :description "A Clojure library for declarative data fetching in derived graphs!"
   :url "http://github.com/LockedOn/graph-router"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}

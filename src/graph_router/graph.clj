@@ -1,29 +1,7 @@
 (ns graph-router.graph
 	(:require [schema.core :as s]
 			  [graph-router.type :refer :all]))
-
-(defn- attribute [k f]
-	(if (nil? f)
-		k
-		[Attribute k f]))
-
-(defn- weave-with [k f]
-	(if (nil? f)
-		k
-		[Weave k f]))
-
-(defn with
-	"Alias a keyword with another function and or register weave functions.
-	See https://github.com/LockedOn/graph-router for more information."
-	([k x]
-		(if (map? x)
-			(with k nil x)
-			(with k x nil)))
-	([k f m] 
-			(-> k 
-				 (attribute f)
-				 (weave-with m))))
-
+			
 (declare parse 
 		 parse-map 
 		 parse-vector 
@@ -38,6 +16,9 @@
 		 recursive-schema
 		 graph-schema)
 
+(defn f? [x]
+	(and (ifn? x) (not (map? x))))
+
 (def recursive-schema
 	{:type (s/eq Recursive)
 	 :value (s/pred var? "var?")})
@@ -45,12 +26,12 @@
 (def attribute-schema
 	{:type (s/eq Attribute)
 	 :value s/Keyword 
-	 :fn (s/pred ifn? "ifn?")})
+	 :fn (s/pred f? "ifn?")})
 
 (def function-schema
 	{:type (s/eq Function)
 	 :value s/Symbol 
-	 :fn (s/pred ifn? "ifn?")})
+	 :fn (s/pred f? "ifn?")})
 
 (def weave-schema
 	{:type (s/eq Weave)
