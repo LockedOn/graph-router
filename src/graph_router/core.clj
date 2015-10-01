@@ -23,7 +23,9 @@
 	(let [symbol-fn (and (symbol? f) (ifn? f))
 		  list-fn (and (list? f) (= 'fn (first f)))]
 		(or (symbol? symbol-fn) 
-		  	(if list-fn (list 'defn (symbol (str (java.util.UUID/randomUUID))) (rest f))))))
+		  	(if list-fn 
+		  		(list 'defn (symbol (str (java.util.UUID/randomUUID))) (rest f))
+		  		f))))
 
 (defn- arg-length 
 	"Takes a vecor of args and returns minimum required arity."
