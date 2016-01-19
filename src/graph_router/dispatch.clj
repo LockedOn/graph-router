@@ -1,6 +1,5 @@
 (ns graph-router.dispatch
-	(:require [schema.core :as s]
-			  [graph-router.type :refer :all]
+	(:require [graph-router.type :refer :all]
 			  [graph-router.graph :as gr]
 			  [graph-router.query :as qu]))
 

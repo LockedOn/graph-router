@@ -30,15 +30,36 @@
 	 :functions (s/both (s/pred seq "seq") [function-schema])})
 
 (def attribute-list-schema
-	(s/both (s/pred seq "seq") [(s/either attribute-schema weave-schema (s/recursive #'context-schema))]))
+	(s/both (s/pred seq "seq") [(s/conditional #(= (:type %) Attribute)
+											   attribute-schema 
+
+											   #(= (:type %) Weave)
+											   weave-schema 
+
+											   #(= (:type %) Context)
+											   (s/recursive #'context-schema))]))
 
 (def context-schema
 	{:type (s/eq Context)
-	 :value (s/either attribute-schema weave-schema)
+	 :value (s/if #(= (:type %) Attribute) 
+	 			  attribute-schema 
+	 			  weave-schema)
 	 :attributes attribute-list-schema})
 
 (def query-schema
-	(s/either attribute-schema function-schema weave-schema attribute-list-schema context-schema))
+	(s/if #(contains? #{Attribute Function Weave Context} (:type %))
+		  (s/conditional #(= (:type %) Attribute)
+					     attribute-schema 
+
+					     #(= (:type %) Function)
+					     function-schema 
+
+					     #(= (:type %) Weave)
+					     weave-schema 
+
+					     #(= (:type %) Context)
+					     context-schema)
+		   attribute-list-schema))
 
 (defn- parse-weave 
 	[fun]
