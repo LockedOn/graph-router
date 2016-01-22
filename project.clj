@@ -1,4 +1,4 @@
-(defproject lockedon/graph-router "0.1.6"
+(defproject lockedon/graph-router "0.1.7"
   :description "A Clojure library for declarative data fetching in derived graphs!"
   :url "http://github.com/LockedOn/graph-router"
   :license {:name "Eclipse Public License"
