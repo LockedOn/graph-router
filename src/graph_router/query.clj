@@ -27,17 +27,17 @@
 (def weave-schema
 	{:type (s/eq Weave)
 	 :value attribute-schema
-	 :functions (s/both (s/pred seq "seq") [function-schema])})
+	 :functions (s/conditional seq [function-schema])})
 
 (def attribute-list-schema
-	(s/both (s/pred seq "seq") [(s/conditional #(= (:type %) Attribute)
-											   attribute-schema 
+	(s/conditional seq [(s/conditional #(= (:type %) Attribute)
+									   attribute-schema 
 
-											   #(= (:type %) Weave)
-											   weave-schema 
+									   #(= (:type %) Weave)
+									   weave-schema 
 
-											   #(= (:type %) Context)
-											   (s/recursive #'context-schema))]))
+									   #(= (:type %) Context)
+									   (s/recursive #'context-schema))]))
 
 (def context-schema
 	{:type (s/eq Context)
@@ -47,19 +47,20 @@
 	 :attributes attribute-list-schema})
 
 (def query-schema
-	(s/if #(contains? #{Attribute Function Weave Context} (:type %))
-		  (s/conditional #(= (:type %) Attribute)
-					     attribute-schema 
+	(s/conditional  #(= (:type %) Attribute)
+					attribute-schema 
 
-					     #(= (:type %) Function)
-					     function-schema 
+					#(= (:type %) Function)
+					function-schema 
 
-					     #(= (:type %) Weave)
-					     weave-schema 
+					#(= (:type %) Weave)
+					weave-schema 
 
-					     #(= (:type %) Context)
-					     context-schema)
-		   attribute-list-schema))
+					#(= (:type %) Context)
+					context-schema
+
+					:else
+					attribute-list-schema))
 
 (defn- parse-weave 
 	[fun]
@@ -91,12 +92,16 @@
 
 (def validate
 	(memoize 
-		(fn [schema form]
-			(s/validate schema (parse form)))))
+		(fn [schema-validator form]
+			(schema-validator (parse form)))))
+
+(def validator 
+	(memoize 
+		#(s/validator %)))
 
 (defn parse 
 	([form schema]
-		(validate schema form))
+		(validate (validator schema) form))
 	([form]
 		(cond (list? form)
 			  (parse-list form)
