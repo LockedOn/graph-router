@@ -255,9 +255,10 @@ Graph-router borrows the syntax from the Clojure thead last macro `->>`. The wea
 
 __NOTE:__ The result is always passed as the last argument to the weave functions.
 
-## TODO
+## Road Map
 
 * Add thread first weave.
+* Allow variant graph nodes where attributes are dependant on type.
 * Statically analyze the query in relation to the graph to validate that the query is a strict subset of graph.
 * Statically analyze the arity of all functions to ensure the correct number of arguments are being passed before the query is processed.
 * Better error reporting when query or graph description does not match schema.
